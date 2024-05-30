@@ -1,0 +1,15 @@
+package com.kosta.exam07;
+
+public class Consumer extends Thread {
+	Product product;
+	
+	public Consumer(Product product) {
+		this.product = product;
+	}
+	
+	//제품 소비
+	public void run() {
+		product.usePdNumber()
+	}
+	
+}

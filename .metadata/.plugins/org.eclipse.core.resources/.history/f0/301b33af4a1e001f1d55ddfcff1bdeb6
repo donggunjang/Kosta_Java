@@ -1,0 +1,24 @@
+package com.kosta.exam08;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class MyFrame extends JFrame {
+	
+	JButton button01;
+	JButton button02;
+	
+	public MyFrame() {
+		setSize(400,300);
+		setVisible(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		new JButton("남자");
+		new JButton("여자");
+	}
+	
+	public static void main(String[] args) {
+		new MyFrame();
+
+	}
+
+}

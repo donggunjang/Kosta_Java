@@ -1,0 +1,18 @@
+package com.kosta.exam10;
+
+import java.awt.FlowLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class FlowLayoutTest extends JFrame{
+	JButton button;
+	
+	public FlowLayoutTest() {
+		for(int i=1; i<=15; i++) {
+			button = new JButton("버튼"+i);
+			add(button);
+		}
+	}
+
+
+}
