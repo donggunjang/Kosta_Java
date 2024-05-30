@@ -1,0 +1,16 @@
+package com.kosta.exam04;
+
+import java.util.Date;
+
+public class HelloTest {
+	
+	public void sayHello() {
+		Date date = new Date();
+		
+		System.out.println("시간: "+date.getTime()+"안녕하세요");
+	}
+	
+	public static void main(String[] args) {
+		
+	}
+}

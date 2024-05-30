@@ -1,0 +1,23 @@
+package com.kosta.exam03;
+
+import java.util.Scanner;
+
+class BankAccountTest{
+	public static void menu() {
+		System.out.println("1.입금 2.출금 3.잔액조회 0.종료");
+	}
+	
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("DONGBank에 오신걸 환영합니다.");
+		BankAccount account = new BankAccount();
+		int sel;
+		int amount;
+		try{
+			
+		}catch(NegativeBalanceException e){
+			System.out.println("예외발생:"+e.getMessage());
+			e.printStackTrace();
+		}
+	}
+}

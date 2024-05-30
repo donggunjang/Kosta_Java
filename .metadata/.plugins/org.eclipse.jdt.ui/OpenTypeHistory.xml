@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<typeInfoHistroy>
+    <typeInfo handle="=day0520/src&lt;com.kosta.exam02{A.java[A" modifiers="1" timestamp="1716170508889"/>
+    <typeInfo handle="=day0520/src&lt;com.kosta.exam05{Person.java[Person" modifiers="1" timestamp="1716173450216"/>
+    <typeInfo handle="=day0520/src&lt;com.kosta.exam06{Book.java[Book" modifiers="1" timestamp="1716182035834"/>
+    <typeInfo handle="=day0521/src&lt;com.kosta.exam04{Shape.java[Shape" modifiers="1" timestamp="1716271410147"/>
+    <typeInfo handle="=day0521/src&lt;com.kosta.exam04{TwoDimShape.java[TwoDimShape" modifiers="1025" timestamp="1716269668843"/>
+    <typeInfo handle="=day0521/src&lt;com.kosta.exam04{ThreeDimShape.java[ThreeDimShape" modifiers="1025" timestamp="1716271512305"/>
+    <typeInfo handle="=day0522/src&lt;com.kosta.exam{Product.java[Product" modifiers="1" timestamp="1716344123299"/>
+    <typeInfo handle="=day0522/src&lt;com.kosta.exam07{Kosta.java[Kosta" modifiers="1" timestamp="1716356985751"/>
+    <typeInfo handle="=day0522/src&lt;com.kosta.exam07{A.java[A" modifiers="513" timestamp="1716357102821"/>
+    <typeInfo handle="=day0522/src&lt;com.kosta.exam07{B.java[B" modifiers="513" timestamp="1716357013427"/>
+    <typeInfo handle="=day0523/C:\/eclipse-jee-2024-03-R-win32-x86_64\/eclipse\/plugins\/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.10.v20240120-1143\/jre\/lib\/jrt-fs.jar`java.desktop=/javadoc_location=/https:\/\/docs.oracle.com\/en\/java\/javase\/17\/docs\/api\/=/=/module=/true=/&lt;java.awt(Frame.class[Frame" modifiers="33" timestamp="1715579065429"/>
+    <typeInfo handle="=day0529/C:\/eclipse-jee-2024-03-R-win32-x86_64\/eclipse\/plugins\/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.10.v20240120-1143\/jre\/lib\/jrt-fs.jar`java.desktop=/javadoc_location=/https:\/\/docs.oracle.com\/en\/java\/javase\/17\/docs\/api\/=/=/module=/true=/&lt;javax.swing(JFrame.class[JFrame" modifiers="33" timestamp="1715579065429"/>
+    <typeInfo handle="=day0529/src&lt;com.kosta.game5{GraphicObject.java[GraphicObject" modifiers="1" timestamp="1716963932763"/>
+    <typeInfo handle="=day0523/C:\/eclipse-jee-2024-03-R-win32-x86_64\/eclipse\/plugins\/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.10.v20240120-1143\/jre\/lib\/jrt-fs.jar`java.desktop=/javadoc_location=/https:\/\/docs.oracle.com\/en\/java\/javase\/17\/docs\/api\/=/=/module=/true=/&lt;java.awt(Panel.class[Panel" modifiers="33" timestamp="1715579065429"/>
+    <typeInfo handle="=day0529/C:\/eclipse-jee-2024-03-R-win32-x86_64\/eclipse\/plugins\/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.10.v20240120-1143\/jre\/lib\/jrt-fs.jar`java.base=/javadoc_location=/https:\/\/docs.oracle.com\/en\/java\/javase\/17\/docs\/api\/=/=/module=/true=/&lt;java.lang(Thread.class[Thread" modifiers="33" timestamp="1715579065429"/>
+    <typeInfo handle="=day0529/C:\/eclipse-jee-2024-03-R-win32-x86_64\/eclipse\/plugins\/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.10.v20240120-1143\/jre\/lib\/jrt-fs.jar`java.desktop=/javadoc_location=/https:\/\/docs.oracle.com\/en\/java\/javase\/17\/docs\/api\/=/=/module=/true=/&lt;javax.swing(JPanel.class[JPanel" modifiers="33" timestamp="1715579065429"/>
+</typeInfoHistroy>

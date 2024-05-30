@@ -1,0 +1,15 @@
+package com.kosta.game5;
+
+import javax.swing.JPanel;
+
+public class MyFrame extends JPanel {
+	public MyFrame() {
+		add(new MyPanel());
+		setSize(800,600);
+		setVisible(true);
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		new MyFrame();
+	}
+}

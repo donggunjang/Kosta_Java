@@ -1,0 +1,8 @@
+package com.kosta.exam03;
+
+//컴퓨터와 사용자가 가위,바위,보 하는 게임을 만들기
+public class GameTestMap {
+	public static void main(String[] args) {
+		
+	}
+}

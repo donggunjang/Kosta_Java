@@ -1,0 +1,8 @@
+package com.kosta.game5;
+
+import java.awt.image.BufferedImage;
+// 미래에 만들어질 적(상대편), 미사일, 플레이어(우리편)이 가져야할 공통적인 속성과
+// 동작을 뽑아서 일반화를 시킨다(부모클래스 생성)
+public class GraphicObject {
+	BufferedImage img = null;
+}

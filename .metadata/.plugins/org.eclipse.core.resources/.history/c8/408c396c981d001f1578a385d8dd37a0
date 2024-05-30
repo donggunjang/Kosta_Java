@@ -1,0 +1,9 @@
+package com.kosta.game5;
+
+public class Bomb extends GraphicObject {
+	
+	public Bomb(String name) {
+		super(name);
+		
+	}
+}

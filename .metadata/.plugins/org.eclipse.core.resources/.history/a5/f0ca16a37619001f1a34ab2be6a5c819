@@ -1,0 +1,41 @@
+package com.kosta.exam06;
+
+import java.awt.Frame;
+import java.awt.Menu;
+import java.awt.MenuBar;
+import java.awt.MenuItem;
+
+// 윈도우 프로그래밍(GUI 프로그래밍)을 위하여
+// 자바가 제공하는 Frame을 상속받은 MyFrame 클래스를 만든다.
+
+public class MyFrame extends Frame {
+	//MyFrame의 구성요서(부속품, 맴버변수)로 LinePanel을 선언.
+	LinePanel lp;
+	
+	public MyFrame() {
+		
+		//생성자에서 부속품인 LinePanel을 생성
+		lp = new LinePanel();
+		add(lp);
+		
+		//메뉴바 생성
+		MenuBar mb = new MenuBar();
+		
+		//주메뉴 "그리기 도구"
+		Menu menu_draw = new Menu("그리기 도구");
+		
+		//부메뉴 "선,사각형,원" 생성
+		MenuItem draw_line = new MenuItem("선");
+		MenuItem draw_rect = new MenuItem("사각형");
+		MenuItem draw_oval = new MenuItem("원");
+		
+		menu_draw.add(draw_line);
+		menu_draw.add(draw_rect);
+		menu_draw.add(draw_oval);
+		
+		
+		setSize(800,600);
+		setVisible(true);
+		
+	}
+}

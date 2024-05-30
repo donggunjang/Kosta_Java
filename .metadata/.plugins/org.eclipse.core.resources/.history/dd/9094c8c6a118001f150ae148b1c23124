@@ -1,0 +1,126 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------
+자바의 컬렉션 프레임워크(동적인 배열)
+==> 배열은 자료형이 같은 기억장소의 모임이며
+	많은 양의 데이터를 처리하기에 적합하다.
+	그러나 배열에는 자료형이 같아야 하고, 배열의 크기를
+	미리 정해야 하기 때문에 메모리 공간이 부족하거나 낭비가 되는 경우가 발생한다.
+	또, 배열의 중간에 데이터를 추가하거나 삭제할 때 번거로운 작업이 된다.
+	
+==> 자바에서는 이러한 배열의 단점을 보완하기 위해
+	동적인 배열 즉 컬렉션 프레임워크를 만들었다.
+	
+<< 컬렉션 프레임워크 종류 >> (동적인 배열)
+1. Set	: 데이터의 중복을 허용하지 않는다.
+
+2. List : 데이터의 중복을 허용.
+
+3. Map	: key,value가 한쌍으로 이루어진 자료구조 
+		  (index 대신에 key에 의해 데이터에 접근하는 방식)
+		  ==> 사전 자료형
+	
+------------------------------------------------------------------
+interface A{
+
+}
+
+class B implements A{
+
+}
+-------------------------------------------------------------------
+interface A{
+
+}
+
+interface B extends A{
+
+}	
+-------------------------------------------------------------------	
+interface A{
+
+}	
+interface B{
+
+}	
+interface C extends A,B{
+		//인터페이스끼리 상속 할 수 있다.
+}	
+-------------------------------------------------------------------
+인터페이스를 구현하는 클래스를 만들 때는 implements
+인터페이스를 상속받은 인터페이스를 만들 때는 extends
+	
+-------------------------------------------------------------------
+All Superinterfaces:
+Collection<E>, Iterable<E>
+
+interface Set extends Collection, Iterable{
+
+}
+--------------------------------------------------------------------
+All Known Subinterfaces:
+NavigableSet<E>, SortedSet<E>
+
+interface NavigableSet extends Set{
+
+}
+
+interface SortedSet extends Set{
+
+}
+
+--------------------------------------------------------------------
+All Known Implementing Classes:
+AbstractSet, ConcurrentHashMap.KeySetView, ConcurrentSkipListSet, CopyOnWriteArraySet, EnumSet, HashSet, JobStateReasons, LinkedHashSet, TreeSet
+
+
+class HashSet implements Set{
+
+}
+	
+class LinkedHashSet implements Set{
+
+}	
+
+class TreeSet implements Set{
+
+}	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

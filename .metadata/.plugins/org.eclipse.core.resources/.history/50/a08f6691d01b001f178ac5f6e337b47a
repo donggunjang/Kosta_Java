@@ -1,0 +1,13 @@
+package com.kosta.exam01;
+
+import java.util.Date;
+
+public class dfasdfas {
+
+	public static void main(String[] args) {
+		int thisYear = (new Date()).getYear();
+		System.out.println(thisYear);
+
+	}
+
+}

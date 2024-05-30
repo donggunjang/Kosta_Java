@@ -1,0 +1,21 @@
+package com.kosta.game5;
+
+import java.awt.Color;
+
+import javax.swing.JFrame;
+
+public class MyFrame extends JFrame {
+	public MyFrame() {
+		MyPanel mp = new MyPanel();
+		setBackground(Color.black);
+		add(mp);
+		setSize(500,500);
+		setVisible(true);
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		new MyFrame();
+	}
+}
+	

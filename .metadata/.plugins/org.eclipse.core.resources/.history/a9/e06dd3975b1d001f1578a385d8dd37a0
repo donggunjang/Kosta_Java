@@ -1,0 +1,20 @@
+package com.kosta.exam04;
+
+import java.util.Date;
+
+public class HelloTest {
+	
+
+	public static void main(String[] args) {
+		Date date = new Date();
+		while(true) {
+			System.out.println(date.getHours()+"시"+date.getMinutes()+"분"+
+						date.getSeconds()+"초" +"안녕하세요");
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}

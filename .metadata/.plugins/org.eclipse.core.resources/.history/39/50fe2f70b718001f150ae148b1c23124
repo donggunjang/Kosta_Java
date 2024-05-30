@@ -1,0 +1,10 @@
+package com.kosta.exam04;
+
+public class ArrayListTest {
+
+	public static void main(String[] args) {
+		
+
+	}
+
+}

@@ -1,0 +1,10 @@
+package com.kosta.exam01;
+
+public class dfasdfas {
+
+	public static void main(String[] args) {
+		int thisYear = (new Data()).
+
+	}
+
+}

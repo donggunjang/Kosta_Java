@@ -1,0 +1,9 @@
+package com.kosta.exam04;
+
+public class MyDate {
+	private String year;
+	private String month;
+	private String date;
+	
+	public MyDate(String year, String month, String date )
+}

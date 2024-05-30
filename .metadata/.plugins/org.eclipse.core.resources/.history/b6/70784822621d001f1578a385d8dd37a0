@@ -1,0 +1,10 @@
+package com.kosta.exam07;
+
+public class CountDownEventTest {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

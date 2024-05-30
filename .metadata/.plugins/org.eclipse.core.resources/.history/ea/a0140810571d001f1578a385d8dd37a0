@@ -1,0 +1,75 @@
+---------------------------------------------------------------------------------
+public class Person {
+	private String name;
+	public Person(String name) {
+		this.name = name;
+	}
+	
+	public void sayHello() {
+		for(int i=1; i<=10; i++) {
+			System.out.println("hello,"+name+"==>"+i);
+			
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				System.out.println(e.getMessage());
+			}
+		}
+	}
+}
+
+public class PersonTest {
+
+	public static void main(String[] args) {
+		Person kim = new Person("김유신");
+		Person lee = new Person("이순신");
+		kim.sayHello();
+		lee.sayHello();
+		
+	}
+}
+
+hello,김유신==>1				hello,이순신==>1
+hello,김유신==>2				hello,이순신==>1
+hello,김유신==>3				hello,이순신==>1
+hello,김유신==>4				hello,이순신==>1
+hello,김유신==>5	 -next->    hello,이순신==>1
+hello,김유신==>6				hello,이순신==>1
+hello,김유신==>7				hello,이순신==>1
+hello,김유신==>8				hello,이순신==>1
+hello,김유신==>9				hello,이순신==>1
+hello,김유신==>10				hello,이순신==>10
+
+------------------------------------------------------------------------------------------
+
+메소드를 호출하면
+호출한 순서대로 동작합니다.
+객체 lee에 입장에서는 kim의 sayHello()가 모두 끝나야 자신에게 
+기회가 온다. 만약 kim이 sayHello()에서 문제가 생기면 lee는 동작을 
+안할 수가 있다. 둘이 공평하게 작업을 수행하도록 하러면 "멀티 쓰레드 프로그래밍"으로 가능함.
+
+
+만약 kim과 lee가 가능하면
+공평하게 작업을 수행하도록 하려면
+"멀티쓰레드 프로그래밍"을 사용할 수 있다.
+
+자바에서는 멀티쓰레드 프로그래밍을 위하여 
+Thread 클래스와 Runnable 인터페이스를 이용한다.
+
+Thread 클래스를 상속하거나 Runnable 인터페이스를 구현하거나
+고평하게 동작시키고자 하는 일을(즉, 쓰레드가 해야할 일은)
+run 메소드를 오버라이딩 해서 그 안에 써 준다.
+
+그리고
+쓰레드를 가동 시키기 위해서는
+start() 메소드를 호출합니다.
+
+만약 start()메소드를 호출하지 않고
+직접 run()을 호출하면 오류는 나지 않지만
+공평하게 스케줄링은 되지 않고 일반 메소드 처럼 동작한다.
+즉, 먼저 호출한 객체가 작업이 완료되고 다음의 객체에게 기회가 온다.
+그래서 쓰레드를 가동시키려면 run()을 호출하는 것이 아니라 start()를 호출해야 한다.
+
+또, Runnable 인터페이스를 구현한 경우에는
+Tunnable 인터페이스는 쓰레드를 가동시키기 위한 start()매소드가 없기 때문에
+Thread 객체로 포장한 후 start()를 호출해야 한다.

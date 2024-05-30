@@ -1,0 +1,15 @@
+package com.kosta.exam03;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MapTest {
+	public static void main(String[] args) {
+		//어떤 사람의 이름, 주소, 전화번호를 리스트에 담아 보자.'
+		List<String> data = new ArrayList<String>();
+		
+		data.add("홍길동");
+		data.add("서울시 종로구 종로2가");
+		data.add("010-1111-1111");
+	}
+}

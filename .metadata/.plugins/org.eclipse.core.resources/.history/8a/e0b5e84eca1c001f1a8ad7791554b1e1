@@ -1,0 +1,19 @@
+package com.kosta.exam04;
+
+import java.util.Scanner;
+
+public class MyDateTest {
+
+	public static void main(String[] args) {
+		MyDate date = new MyDate();
+		Scanner sc = new Scanner(System.in);
+		String day;
+		System.out.println("날짜를 입력하세요");
+		day = sc.next();
+		
+		System.out.println(date.toString());
+		
+
+	}
+
+}

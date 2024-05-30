@@ -1,0 +1,15 @@
+package com.kosta.game5;
+
+public class Missile extends GraphicObject {
+	boolean launched = false;
+	public Missile(String name) {
+		super(name);
+		y = -200;
+	}
+	public void update() {
+		if(launched) y -= 1;
+		if(y < -100) launched = false;
+	}
+	
+
+}

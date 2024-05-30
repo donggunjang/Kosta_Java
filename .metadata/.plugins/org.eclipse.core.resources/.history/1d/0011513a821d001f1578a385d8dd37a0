@@ -1,0 +1,30 @@
+package com.kosta.game5;
+
+public class Missile extends GraphicObject {
+	boolean launched = false;
+	
+	//미사일 생성시에 미사일로 표현할 이미지 파일명을 전달 받아
+	//부모생성자인 GraphicObject 생성자에게 전달
+	public Missile(String name) {
+		super(name);
+		//맨 처음 미사일 위치를 화면에 보이지 않게 설정
+		y = -200;
+	}
+	@Override
+	public void update() {
+		//미사일이 발사 되었으면 y의 위치를 1씩 감소시켜서 위이로 이동
+		if(launched) {
+			y -= 1;
+		}
+		if(y < -100) {
+			launched = false;
+		}
+	}
+	
+	public void KeyPressed() {
+		
+	}
+	
+	
+
+}

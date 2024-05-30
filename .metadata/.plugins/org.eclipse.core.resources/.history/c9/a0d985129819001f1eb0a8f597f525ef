@@ -1,0 +1,30 @@
+package com.kosta.file;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Scanner;
+
+//사람의 이름,주소,전화를 입력 받아 출력하는 프로그램
+public class FileTest02 {
+	public static void main(String[] args) throws IOException {
+		String name, addr, phone;
+		Scanner sc = new Scanner(System.in);
+		System.out.println("이름 입력:");
+		name = sc.next();
+		System.out.println("주소 입력:");
+		addr = sc.next();
+		System.out.println("전화번호 입력:");
+		phone = sc.next();
+		
+		try {
+			FileWriter fw = new FileWriter("c:/data/info.txt");
+			fw.write("이름:"+name+"\n");
+			fw.write("주소::"+addr+"\n");
+			fw.write("전화:"+phone+"\n");
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+		
+	}
+}

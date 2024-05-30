@@ -1,0 +1,10 @@
+package com.kosta.game5;
+
+import javax.swing.JPanel;
+
+public class MyFrame extends JPanel {
+	public MyFrame() {
+		setTitle("Roket Game");
+		add(new Mypanel());
+	}
+}

@@ -1,0 +1,22 @@
+package com.kosta.game5;
+
+import java.awt.event.KeyListener;
+import javax.swing.JPanel;
+
+public class MyPanel extends JPanel implements KeyListener {
+	//사용자, 적, 미사일 맴버로 초기화
+	Enermy enermy;
+	Player player;
+	Missile missile;
+	public MyPanel() {
+		super();
+		this.addKeyListener(this);
+		this.requestFocus();
+		setFocusable(true);
+		
+		//화면에 보여줄 사용자, 적, 미상일의 객체들을 생성
+		enermy = new Enermy("enermy.png");
+		player = new Player("player.png");
+		missile = new Missile("missile.png");
+	}
+}

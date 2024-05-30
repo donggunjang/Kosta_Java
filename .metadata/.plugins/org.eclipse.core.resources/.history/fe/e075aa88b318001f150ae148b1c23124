@@ -1,0 +1,23 @@
+package com.kosta.exam03;
+
+import java.util.ArrayList;
+
+class Person{
+	String name;
+	int age;
+	public Person(String name, int age) {
+		this.name = name;
+		this.age = age;
+	}
+	public void sayHello() {
+		System.out.println("Hello" + name);
+	}
+}
+
+public class ArrayListTest02 {
+
+	public static void main(String[] args) {
+		ArrayList list = new ArrayList();
+	}
+
+}

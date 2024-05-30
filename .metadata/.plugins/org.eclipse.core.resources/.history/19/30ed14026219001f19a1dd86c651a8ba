@@ -1,0 +1,16 @@
+package com.kosta.exam02;
+
+import java.util.ArrayList;
+
+public class ArrayListAndLinkedListTest {
+
+	public static void main(String[] args) {
+		ArrayList<String> data = new ArrayList<String>();
+		
+		data.add("사과");
+		data.add("수박");
+		data.add("딸기");
+		
+	}
+
+}

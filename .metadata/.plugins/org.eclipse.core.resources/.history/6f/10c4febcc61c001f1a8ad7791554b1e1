@@ -1,0 +1,17 @@
+package com.kosta.exam04;
+
+import java.util.StringTokenizer;
+
+public class MyDate {
+	private String year;
+	private String month;
+	private String date;
+	public MyDate(String str) {
+		StringTokenizer st = new StringTokenizer(str, "/");
+		this.year = st.nextToken();
+		this.month = st.nextToken();
+		this.date = st.nextToken();
+	}
+	
+	
+}

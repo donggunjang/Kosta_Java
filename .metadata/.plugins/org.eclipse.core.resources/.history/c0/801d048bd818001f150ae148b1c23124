@@ -1,0 +1,68 @@
+package com.kosta.exam06;
+
+import java.awt.Graphics;
+import java.awt.Panel;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+
+public class LinePanel extends Panel implements MouseListener {
+	
+	//선을 그리면 이전에 그려진 선이 사라진다.
+	//그려진 모든 선을 그리려면
+	//선을 그랠때 마다 리스트에 담아두고 paint메소드에서
+	//리스트에 담긴 요소만큼 모두 다시 그려주도록 해야 한다.
+	
+	ArrayList<GraphicInfo> list;
+	
+	int x1,y1,x2,y2;
+	
+	public LinePanel() {
+		System.out.println("생성자 동작함");
+		list = new ArrayList<GraphicInfo>();
+		addMouseListener(this);
+		
+	}
+	
+	@Override
+	public void paint(Graphics g) {
+//		super.paint(g);
+		System.out.println("페이트 동작함");
+		for(GraphicInfo s:list) {
+			g.drawLine(s.getX1(), s.getY1(), s.getX2(), s.getY2());
+		}
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		System.out.println("마우스 눌러짐");
+		x1 = e.getX();
+		y1 = e.getY();
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		System.out.println("마우스 떼어짐");
+		x2 = e.getX();
+		y2 = e.getY();
+		list.add(new GraphicInfo(x1,y1,x2,y2));
+		repaint();
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+}

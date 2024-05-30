@@ -1,0 +1,20 @@
+package com.kosta.exam05;
+
+public class CountDownEvent extends Thread {
+	private int dalay;
+	private String msg;
+	
+	public CountDownEvent(int waittime, int msg) {
+		super();
+		this.waittime = waittime;
+		this.msg = msg;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		super.run();
+	}
+	
+	
+}

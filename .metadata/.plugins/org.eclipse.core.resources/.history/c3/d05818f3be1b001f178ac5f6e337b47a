@@ -1,0 +1,15 @@
+package com.kosta.exam01;
+
+public class CharAtTest02 {
+
+	public static void main(String[] args) {
+		String data = "hello java";
+		
+		
+		System.out.println(l);
+		for(int i=0; i<data.length(); i++) {
+			System.out.print(i);
+		}
+	}
+
+}

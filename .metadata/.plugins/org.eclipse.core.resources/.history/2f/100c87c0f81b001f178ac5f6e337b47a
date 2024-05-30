@@ -1,0 +1,11 @@
+package com.kosta.exam01;
+
+public class StartsWithEndsWith {
+
+	public static void main(String[] args) {
+		String data ="hello java";
+		boolean flag = data.startsWith("hello");
+
+	}
+
+}
