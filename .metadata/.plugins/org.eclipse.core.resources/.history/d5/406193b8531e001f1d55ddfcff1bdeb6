@@ -1,0 +1,25 @@
+package com.kosta.exam11;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+
+public class AddTest extends JFrame implements ActionListener {
+	
+	JTextField ftf01;
+	JTextField ftf02;
+	JTextField ftf03;
+	
+	public AddTest() {
+		
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
