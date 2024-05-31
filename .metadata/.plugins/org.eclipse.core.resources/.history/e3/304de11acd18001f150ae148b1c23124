@@ -1,7 +1,0 @@
-package com.kosta.exam05;
-
-import java.awt.Panel;
-
-public class Linepanel extends Panel {
-
-}
