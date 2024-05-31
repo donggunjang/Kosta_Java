@@ -57,6 +57,7 @@ public class RepairShop3 extends JFrame {
 					jlb_result.setText("총금액:"+total+"원");
 				}
 			});
+			i++;
 			
 		}
 		
@@ -67,8 +68,6 @@ public class RepairShop3 extends JFrame {
 		setSize(400,300);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		
 	}
 
 	public static void main(String[] args) {

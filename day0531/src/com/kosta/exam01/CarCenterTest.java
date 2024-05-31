@@ -24,7 +24,7 @@ public class CarCenterTest extends JFrame {
 		repair.put("엔진오일 교환", 45000);
 		repair.put("자동 변속기 교환", 80000);
 		repair.put("에어콘 필터 교환", 45000);
-		repair.put("타이어 교환", 45000);
+		repair.put("타이어 교환", 100000);
 		
 		Set<String> keyList = repair.keySet();
 		Iterator<String> iter = keyList.iterator();
