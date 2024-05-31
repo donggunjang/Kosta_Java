@@ -6,6 +6,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.swing.JButton;
@@ -17,20 +19,8 @@ import javax.swing.JTextArea;
 public class KorToEng2 extends JFrame {
 	JTextArea jta01;
 	JTextArea jta02;
-	public static String suffix[] = {"로","된","은","를","는","이", "가"};
 	
-	//조사를 떼고 반환하는 메소드
-	public static String getRemoveSuffix(String kor) {
-		//영어로
-		for(String s:suffix) {
-			if(kor.endsWith(s)) {
-				kor = kor.substring(0, kor.length()-1);
-				break;
-			}
-		}		
-		return kor;
-	}
-	
+
 	public KorToEng2() {
 		jta01= new JTextArea(10, 50);
 		jta02= new JTextArea(10, 50);
@@ -73,16 +63,12 @@ public class KorToEng2 extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String str = jta01.getText();
-				StringTokenizer st = new StringTokenizer(str);
-				
-				while(st.hasMoreTokens()) {
-					String kor = st.nextToken();
-					kor = getRemoveSuffix(kor);
-					String eng =engMap.get(kor);
-					if(eng != null) {
-						str =  str.replace(kor, eng);
-					}
-					
+				Set<String> keyList = engMap.keySet();
+				Iterator<String> iter = keyList.iterator();
+				while(iter.hasNext()) {
+					String kor = iter.next();
+					String eng = engMap.get(kor);
+					str = str.replace(kor, eng);
 				}
 				jta02.setText(str);
 
