@@ -30,7 +30,7 @@ public class TCPChatClient extends JFrame {
 		try {
 			
 			//1. Server와 통신하기 위한 소켓을 생성한다.
-			socket = new Socket("172.30.1.69", 9003);
+			socket = new Socket("172.30.1.63", 9003);
 			//2. 생성된 소켓을 통해 스트림을 생성한다.
 			is = socket.getInputStream();
 			os = socket.getOutputStream();

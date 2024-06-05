@@ -1,7 +1,0 @@
-package com.kosta.exam04;
-
-public class IllegalArgumentException extends Exception {
-	public void IllegalArgumentException(String message) {
-		super(message);
-	}
-}

@@ -1,8 +1,0 @@
-package com.kosta.exam01;
-
-public class IndexOfContainsTest {
-	public static void main(String[] args) {
-		String data = "hello java hello oracle";
-		data.indexOf("java");
-	}
-}

@@ -1,8 +1,0 @@
-package com.kosta.exam01;
-
-public class CharAtTest {
-	public static void main(String[] args) {
-		String data = "Hello Java";
-		data.charAt(0);
-	}
-}
