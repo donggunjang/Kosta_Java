@@ -1,7 +1,0 @@
-package com.kosta.game5;
-
-import java.awt.Panel;
-
-public class MyPanel extends Panel {
-
-}

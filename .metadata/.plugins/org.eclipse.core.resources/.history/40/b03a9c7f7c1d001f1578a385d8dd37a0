@@ -1,7 +1,0 @@
-package com.kosta.game;
-
-import java.awt.image.BufferedImage;
-
-public class GraphicObject {
-	BufferedImage img = null;
-}

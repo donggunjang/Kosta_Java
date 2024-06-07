@@ -185,7 +185,6 @@ public class InsertAndSelectStudentGUI extends JFrame {
 		});
 		
 		btnUpdate.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				

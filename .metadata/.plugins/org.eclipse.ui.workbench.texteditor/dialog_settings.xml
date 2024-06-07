@@ -6,12 +6,19 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="생성자"/>
+		<item key="selection" value="btn"/>
 		<list key="findhistory">
+			<item value="btn"/>
+			<item value="eng"/>
+			<item value="kor"/>
+			<item value="math"/>
 			<item value="생성자"/>
 			<item value="클래스변수"/>
 		</list>
 		<list key="replacehistory">
+			<item value="goal"/>
+			<item value="speed"/>
+			<item value="balance"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

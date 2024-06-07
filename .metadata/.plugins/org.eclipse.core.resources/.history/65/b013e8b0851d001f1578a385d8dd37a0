@@ -1,5 +1,0 @@
-package com.kosta.game5;
-
-public class SpaceShip extends GraphicObject {
-
-}
