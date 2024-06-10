@@ -62,18 +62,27 @@ public class BookTest extends JFrame {
 		add(p_north, new BorderLayout().NORTH);
 		add(jsp, new BorderLayout().CENTER);
 		
-		setSize(600, 400);
-		setVisible(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		btn_select.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				
+				BookDAO dao = new BookDAO();
+				ArrayList<BookVO> list = dao.selectBook(jtf_pub.getText());
+				for(BookVO vo:list) {
+					Vector<String> row = new Vector<String>();
+					row.add(vo.getBookid()+"");
+					row.add(vo.getBookname());
+					row.add(vo.getPubhlisher());
+					row.add(vo.getPrice()+"");
+					rowData.add(row);
+				}
+				table.updateUI();
 			}
 		});
+		
+		setSize(600, 400);
+		setVisible(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 	}
 
