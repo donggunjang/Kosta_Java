@@ -1,4 +1,4 @@
-package com.kosta.exam03;
+package com.kosta.exam01;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -31,6 +31,19 @@ public class ProductTest2 extends JFrame {
 	Vector<String> colName;
 	Vector<Vector<String>> rowData; 
 	JTable table;
+	
+	int no;
+	String item;
+	int qty;
+	int price;
+	
+	//텍스트 필드의 입력값을 읽어와서 각각의 변수에 저장하는 메소드
+	public void setData() {
+		no = Integer.parseInt(jtf_no.getText());
+		item = jtf_item.getText();
+		qty = Integer.parseInt(jtf_qty.getText());
+		price = Integer.parseInt(jtf_price.getText());
+	}
 	
 	public void loadtable() {
 		rowData.clear();
@@ -145,12 +158,7 @@ public class ProductTest2 extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int no = Integer.parseInt(jtf_no.getText());
-				String item = jtf_item.getText();
-				int qty = Integer.parseInt(jtf_qty.getText());
-				int price = Integer.parseInt(jtf_price.getText());
-				
-				
+				setData();
 				ProductVO pvo = new ProductVO(no, item, qty, price);
 				ProductDAO dao = new ProductDAO();
 				int re = dao.insertProduct(pvo);
@@ -170,6 +178,12 @@ public class ProductTest2 extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int no = Integer.parseInt(jtf_no.getText());
+				int confirm = JOptionPane.showConfirmDialog(
+						null, "정말 삭제 하시겠습니까?", "학생삭제", JOptionPane.OK_CANCEL_OPTION);
+				if(confirm != 0) {
+					return;
+				}
+				
 				ProductDAO dao = new ProductDAO();
 				int re = dao.deleteProduct(no);
 				if(re > 0) {
@@ -178,9 +192,6 @@ public class ProductTest2 extends JFrame {
 				}else {
 					JOptionPane.showMessageDialog(null, "제품 삭제를 실패 했습니다.");
 				}
-				
-				
-				
 			}
 		});
 		
@@ -188,10 +199,7 @@ public class ProductTest2 extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int no = Integer.parseInt(jtf_no.getText());
-				String item = jtf_item.getText();
-				int qty = Integer.parseInt(jtf_qty.getText());
-				int price = Integer.parseInt(jtf_price.getText());
+				setData();
 				
 				ProductVO pvo = new ProductVO(no, item, qty, price);
 				ProductDAO dao = new ProductDAO();
@@ -213,5 +221,4 @@ public class ProductTest2 extends JFrame {
 	public static void main(String[] args) {
 		new ProductTest2("제품 관리");
 	}
-
 }
