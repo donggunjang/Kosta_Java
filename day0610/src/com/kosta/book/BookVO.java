@@ -1,3 +1,4 @@
+
 package com.kosta.book;
 
 import javax.swing.JFrame;
@@ -5,14 +6,14 @@ import javax.swing.JFrame;
 public class BookVO{
 	private int bookid;
 	private String bookname;
-	private String pubhlisher;
 	private int price;
-	public BookVO(int bookid, String bookname, String pubhlisher, int price) {
+	private String pubhlisher;
+	public BookVO(int bookid, String bookname, int price, String pubhlisher) {
 		super();
 		this.bookid = bookid;
 		this.bookname = bookname;
-		this.pubhlisher = pubhlisher;
 		this.price = price;
+		this.pubhlisher = pubhlisher;
 	}
 	public BookVO() {
 		super();
@@ -30,18 +31,19 @@ public class BookVO{
 	public void setBookname(String bookname) {
 		this.bookname = bookname;
 	}
-	public String getPubhlisher() {
-		return pubhlisher;
-	}
-	public void setPubhlisher(String pubhlisher) {
-		this.pubhlisher = pubhlisher;
-	}
 	public int getPrice() {
 		return price;
 	}
 	public void setPrice(int price) {
 		this.price = price;
 	}
+	public String getPubhlisher() {
+		return pubhlisher;
+	}
+	public void setPubhlisher(String pubhlisher) {
+		this.pubhlisher = pubhlisher;
+	}
+	
 	
 
 }
