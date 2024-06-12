@@ -14,7 +14,7 @@ public class BookVO{
 	private String pubhlisher;
 	
 	public BookVO(int bookid, String bookname, int price, int salepice, String orderdate, int custid, String name,
-			String phone, String pubhlisher) {
+			String phone) {
 		super();
 		this.bookid = bookid;
 		this.bookname = bookname;
@@ -24,7 +24,6 @@ public class BookVO{
 		this.custid = custid;
 		this.name = name;
 		this.phone = phone;
-		this.pubhlisher = pubhlisher;
 	}
 	public BookVO() {
 		super();

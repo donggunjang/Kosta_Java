@@ -10,6 +10,7 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -46,6 +47,8 @@ public class BookTest extends JFrame {
 		colName.add("고객명");
 		colName.add("전화번호");
 		
+		rowData = new Vector<Vector<String>>();
+		
 		table = new JTable(rowData, colName);
 		JScrollPane jsp = new JScrollPane(table);
 		add(p1, BorderLayout.NORTH);
@@ -65,10 +68,12 @@ public class BookTest extends JFrame {
 					row.add(vo.getPrice()+"");
 					row.add(vo.getSalepice()+"");
 					row.add(vo.getOrderdate());
+					row.add(vo.getCustid()+"");
 					row.add(vo.getName());
 					row.add(vo.getPhone());
 					rowData.add(row);
 				}
+				JOptionPane.showMessageDialog(null, "조회완료");
 				table.updateUI();
 				
 			}
