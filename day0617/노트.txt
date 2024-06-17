@@ -524,8 +524,6 @@ o.bookid = b.bookid
 order by name;	
 	
 ==> select 절의 서브쿼리
-
-
 	
 12) 도서의 가격과 판매가격의 차이가 가장 많은 주문
 select price - saleprice from book b, orders o
@@ -537,6 +535,7 @@ where
 o.bookid = b.bookid and
 price - saleprice = (select max(price-saleprice) 
 from orders o, book b
+where o.bookid = b.bookid);
 
 13) 도서의 판매액 평균보다 자신의 구매액 평균이 더 높은 고객의 이름
 select name from (select name, avg(saleprice) avg
