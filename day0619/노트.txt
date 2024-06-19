@@ -1,0 +1,525 @@
+<< 참조키의 설정
+REFERENCES 부보테이블(주식별자) 
+
+CREATE TABLE newbook(
+	bookid NUMBER PRIMARY KEY,
+	bookname VARCHAR2(50) NOT NULL,
+	publisher VARCHAR2(20),
+	price NUMBER
+);
+
+CREATE TABLE newcustomer(
+	custid NUMBER PRIMARY KEY,
+	name VARCHAR2(20),
+	addr VARCHAR2(20),
+	phone VARCHAR2(20)
+);
+
+CREATE TABLE neworders(
+	orderid	 NUMBER PRIMARY KEY,
+	custid NUMBER REFERENCES newcustomer(custid),
+	bookid NUMBER REFERENCES newbook(bookid),
+	saleprice NUMBER,
+	orderdate DATE
+);
+
+insert into newbook select bookid, bookname, pubhlisher, price from book;
+INSERT INTO newcustomer SELECT *FROM customer;
+INSERT INTO neworders SELECT *FROM orders;
+
+insert into newbook select bookid, bookname, publisher, price from book;
+insert into newcustomer select * from customer;
+
+ insert into neworders values(2,10,5,7000,sysdate);
+1행에 오류:
+ORA-02291: 무결성 제약조건(C##MADANG.SYS_C008376)이 위배되었습니다- 부모 키가 없습니다
+-> 추가하려는 고객번호 10번은 newcustomer 테이블에 없기 때문에 오류 발생
+
+--------------------------------------------------------------------------
+
+newbook
+newcustomer
+neworders 의 부모는 newbook, newcustomer
+
+==> 참조하고 있는 자식테이블이 있으면 부모테이블을 삭제 할 수 없다.
+drop table newbook
+           *
+1행에 오류:
+ORA-02449: 외래 키에 의해 참조되는 고유/기본 키가 테이블에 있습니다
+
+==> 자식테이블을 먼저 삭제한 후 부모테이블을 삭제 해야 한다.
+SQL> drop table neworders;
+테이블이 삭제되었습니다.
+
+SQL> drop table newbook;
+테이블이 삭제되었습니다.
+
+SQL> drop table newcustomer;
+테이블이 삭제되었습니다.
+
+** 참조키를 설정 할 때에는 
+	반드시 부모테이블의 주식별자를 참조하도록 해야 한다.
+	
+CREATE TABLE newbook(
+	bookid NUMBER ,
+	bookname VARCHAR2(50) NOT NULL,
+	publisher VARCHAR2(20),
+	price NUMBER
+);
+
+CREATE TABLE newcustomer(
+	custid NUMBER ,
+	name VARCHAR2(20),
+	addr VARCHAR2(20),
+	phone VARCHAR2(20)
+);
+
+CREATE TABLE neworders(
+	orderid	 NUMBER PRIMARY KEY,
+	custid NUMBER REFERENCES newcustomer(custid),
+	bookid NUMBER REFERENCES newbook(bookid),
+	saleprice NUMBER,
+	orderdate DATE
+);
+
+custid NUMBER REFERENCES newcustomer(custid),
+*
+3행에 오류:
+ORA-02270: 이 열목록에 대해 일치하는 고유 또는 기본 키가 없습니다.
+
+==> 참조키로 설정하려는 컬럼은
+		반드시 부모테이블의 "주식별자"여야 한다.
+		
+----------------------------------------------------------------------------
+<< 기본키와 참조키의 설정 >>
+- 컬럼레벨의 설정	: 컬럼을 작성 할 때 설정
+- 테이블레벨의 설정	: 컬럼들을 다 작성하고 마지막에 키를 설정
+
+-컬럼 레벨의 설정-
+CREATE TABLE newbook(
+	bookid NUMBER PRIMARY KEY,
+	bookname VARCHAR2(50) NOT NULL,
+	publisher VARCHAR2(20),
+	price NUMBER
+);
+
+-테이블 레벨의 설정-
+CREATE TABLE newbook(
+	bookid NUMBER,
+	bookname VARCHAR2(50) NOT NULL,
+	publisher VARCHAR2(20),
+	price NUMBER,
+	PRIMARY KEY(bookid)
+);
+
+CREATE TABLE newcustomer(
+	custid NUMBER ,
+	name VARCHAR2(20),
+	addr VARCHAR2(20),
+	phone VARCHAR2(20),
+	PRIMARY KEY(custid)
+);
+
+CREATE TABLE neworders(
+	orderid	 NUMBER ,
+	custid NUMBER,
+	bookid NUMBER,
+	saleprice NUMBER,
+	orderdate DATE,
+	FOREIGN KEY(custid) REFERENCES newcustomer(custid),
+	FOREIGN KEY(bookid) REFERENCES newbook(bookid),
+	PRIMARY KEY(orderid)
+);
+
+NULL
+- 컬럼값의 널 허용
+NOT NULL
+-컬럼값의 널을 허용 하지 않음
+PRIMARY KEY
+-테이블에서 레코드들의 구분을 위한 식별자를 설정
+FOREIGN KEY
+-부모테이블과의 관계 설정을 위한 참조키
+DEFAULT
+-컬럼값을 생략하면 기본값으로 설정
+UNIQUE
+-컬럼에 유일한 값이 와야하는 조건
+유일키
+CHECK
+-컬럼값으로 와야하는 값들의 조건을 설정
+
+----------------------------------------------------------------------
+오류) "개체무결성에 위배 됩니다."
+	==> PRIMARY KEY로 설정된 컬럼에 중복된 값을 넣었을때, null값이 들어 갔을때.
+	
+오류) "참조 무결성에 위배 됩니다."
+	==> FOREIGN KEY한 컬럼의 값이 부모의 테이블에 존재하지 않을때.
+	
+----------------------------------------------------------------------
+
+<< 두개이상의 컬럼이 합쳐져서 pk 설정하기 >> 
+
+-도서명과 출판사를 합쳐서 pk설정 (테이블 레벨로 설정 가능)
+CREATE TABLE newbook(
+	bookname VARCHAR2(50),
+	publisher VARCHAR2(20),
+	price NUMBER,
+	PRIMARY KEY(bookname, publisher)
+);
+
+INSERT INTO newbook VALUES('자바','코스타',50000);
+INSERT INTO newbook VALUES('자바','한빛',50000);
+INSERT INTO newbook VALUES('오라클','코스타',50000);
+INSERT INTO newbook VALUES('자바','코스타',50000);		<--오류
+
+CREATE TABLE newcustomer(
+	custid NUMBER ,
+	name VARCHAR2(20),
+	addr VARCHAR2(20),
+	phone VARCHAR2(20),
+	PRIMARY KEY(custid)
+);
+INSERT INTO newcustomer VALUES(1, '변시우', '서울','1111');
+INSERT INTO newcustomer VALUES(2, '임유나', '서울','1111');
+
+연습) neworders 테이블을 생성
+		주문번호를 pk, newbook의 pk를 참조키로 설정
+					newcustomer의 pk를 참조키로 설정
+					
+CREATE TABLE neworders(
+	orderid	 NUMBER ,
+	custid NUMBER,
+	bookname VARCHAR2(50),
+	publisher VARCHAR2(20),
+	saleprice NUMBER,
+	orderdate DATE,
+	FOREIGN KEY(custid) REFERENCES newcustomer(custid),
+	FOREIGN KEY(bookname, publisher) REFERENCES newbook(bookname, publisher),
+	PRIMARY KEY(orderid)
+);
+
+INSERT INTO neworders VALUES(1,1,'자바','코스타','40000',sysdate);
+INSERT INTO neworders VALUES(2,1,'자바','코스타','40000',sysdate);
+INSERT INTO neworders VALUES(3,1,'오라클','코스타','40000',sysdate);
+INSERT INTO neworders VALUES(4,2,'자바','미디어','40000',sysdate); <-- 오류
+
+CREATE TABLE theater(
+	thid NUMBER,
+	thname VARCHAR2(20),
+	thloc VARCHAR2(20),
+	PRIMARY KEY(thid)
+);
+
+INSERT INTO theater VALUES(1, '롯데', '잠실');
+INSERT INTO theater VALUES(2, '메가', '강남');
+INSERT INTO theater VALUES(3, '대한', '잠실');
+
+CREATE TABLE screen(
+	thid NUMBER,
+	scrid NUMBER,
+	title VARCHAR2(20),
+	price NUMBER CHECK(price < 20000),
+	seatcnt NUMBER,
+	FOREIGN KEY(thid) REFERENCES theater(thid),
+	PRIMARY KEY(thid,scrid)
+);
+
+INSERT INTO screen VALUES(1,1, '어려운 영화', 15000, 48);
+INSERT INTO screen VALUES(3,1, '멋진 영화', 7500, 120);
+INSERT INTO screen VALUES(3,2, '재밌는 영화', 8000, 110);
+
+CREATE TABLE thcustomer(
+	custid NUMBER CHECK(custid BETWEEN 1 AND 10),
+	custname VARCHAR2(20),
+	custaddr VARCHAR2(20),
+	PRIMARY KEY(custid)
+);
+
+INSERT INTO thcustomer VALUES(3, '홍길동', '강남');
+INSERT INTO thcustomer VALUES(4, '김철수', '잠실');
+INSERT INTO thcustomer VALUES(9,'박영희', '강남');
+
+CREATE TABLE reservation(
+	thid NUMBER,
+	scrid NUMBER,
+	custid NUMBER,
+	seatnumber NUMBER,
+	rvdate DATE,
+	FOREIGN KEY(thid,scrid) REFERENCES screen(thid,scrid),
+	FOREIGN KEY(custid) REFERENCES thcustomer(custid),
+	PRIMARY KEY(thid,scrid,custid)
+);
+
+INSERT INTO reservation VALUES(3, 2, 3, 15, '2014/09/01');
+INSERT INTO reservation VALUES(3, 1, 4, 16, '2014/09/01');
+INSERT INTO reservation VALUES(1, 1, 9, 48, '2014/09/01');
+
+-----------------------------------------------------------------------
+1) 모든 극장의 이름과 위치를 보이시오
+SELECT thname, thloc FROM theater;
+
+2) '잠실'에 있는 극장을 조회
+SELECT thname FROM theater WHERE thloc ='잠실';
+
+3) '잠실'에 사는 고객의 이름을 오름차순으로 조회
+SELECT custname 
+FROM thcustomer 
+WHERE custaddr = '잠실' 
+ORDER BY custname;
+
+4) 가격이 8000원 이하인 영화의 극장번호, 상영관번화, 영화제목을 조회
+SELECT thid, scrid, title
+FROM screen
+WHERE price <=8000;
+
+5) 극장 위치와 고객의 주소가 같은 고객을 조회
+SELECT cs.*
+FROM thcustomer cs, theater th, reservation rv
+WHERE cs.custid = rv.custid
+AND th.thid = rv.thid
+AND thloc = custaddr;
+
+6) 극장의 수는 몇개 인가?
+SELECT COUNT(thid)
+FROM theater;
+
+7) 상영되는 영화의 평균 가격은 얼마인가?
+SELECT AVG(price)
+FROM screen;
+
+8) 2014년 9월 1일에 영화를 관람한 고객의 수는 얼마인가?
+SELECT COUNT(custid)
+FROM reservation
+WHERE rvdate = '2014/09/01';
+
+9) '대한' 극장에서 상영된 영화제목을 출력
+SELECT title
+FROM screen
+WHERE thid = (SELECT thid FROM theater WHERE thname = '대한');
+
+10) '대한' 극장에서 영화를 본 고객의 이름을 출력
+SELECT custname
+FROM theater th, thcustomer tc, reservation re
+WHERE re.custid = tc.custid AND th.thid = re.thid
+AND thname = '대한';
+
+11) '대한' 극장의 전체 수입을 출력
+
+- 극장번호가 3번인것 중엣 상영관 번호별로 예약 건수를 조회
+SELECT scrid, COUNT(*)
+FROM reservation
+WHERE thid = 3
+GROUP BY scrid; 
+
+-극장이름이 대한 인것 중에 상영관 번호별로 예약 건수를 조회
+SELECT scrid, COUNT(*)
+FROM reservation
+WHERE thid = (SELECT thid FROM theater WHERE thname = '대한')
+GROUP BY scrid;
+
+-극장이름이 대한 인것 중에 상영관 번호별로 예약 건수와 영화 가격을 조회
+SELECT thid, scrid, COUNT(*) cnt
+FROM reservation
+WHERE thid = (SELECT thid FROM theater WHERE thname = '대한')
+GROUP BY thid, scrid
+
+SELECT SUM(cnt*
+(SELECT price FROM screen b WHERE
+ a.thid = b.thid AND a.scrid = b.scrid)) sum
+from (SELECT thid, scrid, COUNT(*) cnt
+FROM reservation
+WHERE thid = (SELECT thid FROM theater WHERE thname = '대한')
+GROUP BY thid, scrid) a;
+
+
+12) 극장별 상영관 수를 출력
+SELECT th.thid, COUNT(scrid)
+FROM theater th LEFT OUTER JOIN screen scr
+ON th.thid = scr.thid
+GROUP BY th.thid;
+
+13) '잠실'에 있는 극장의 상영관 출력
+SELECT *
+FROM screen 
+WHERE thid in (SELECT thid FROM theater WHERE thloc = '잠실');
+
+14) 2014년 9월 1일의 극장별 평균 관람 고객수 출력
+-극장별 관람수 / 극장별 상영관 수
+
+SELECT thid, COUNT(*), COUNT(DISTINCT scrid)
+FROM reservation
+WHERE rvdate = '2014/09/01'
+GROUP BY thid;
+
+SELECT thid, COUNT(*)/COUNT(DISTINCT scrid) avg
+FROM reservation
+WHERE rvdate = '2014/09/01'
+GROUP BY thid;
+
+SELECT thid,
+(SELECT thname FROM theater a WHERE a.thid = b.thid) thname,
+COUNT(*)/COUNT(DISTINCT scrid) avg
+FROM reservation b
+WHERE rvdate = '2014/09/01'
+GROUP BY thid;
+
+
+15) 2014년 9월 1일에 가장 많은 고객이 관람한 영화를 출력
+
+
+16) 각 테이블에 데이터를 삽입하는 INSERT문을 하나씩 실행 하시오.
+INSERT INTO theater VALUES(4,'코스타','종로');
+INSERT INTO screen VALUES(4,1,'재밌는 자바',10000,50);
+INSERT INTO thcustomer VALUES(10, '홍석영','종로');
+INSERT INTO reservation VALUES(4,1,10,7,'2024/06/09');
+
+17) 영화의 가격을 10%씩 인상하시오.
+UPDATE screen SET price = price *1.1;
+
+----------------------------------------------------------------------
+
+DDL 데이터 정의어
+	CREATE	테이블 생성
+	ALTER	테이블 수정
+	DROP	테이블 삭제
+
+DML 데이터 조작어
+	INSERT	
+	UPDATE
+	DELETE
+	SELECT
+----------------------------------------------------------------------
+
+<< 테이블 구조 변경 >>
+- 컬럼 추가
+- 컬럼 삭제
+- 컬럼 속성 변경
+
+<< 컬럼 추가 >>
+ALTER TABLE 테이블명 ADD 추가할컬럼명 자료형;
+
+<< 컬럼 삭제 >>
+ALTER TABLE 테이블명 DROP coulumn 컬럼명;
+
+<< 컬럼 속성 수정 >>
+ALTER TABLE 테이블명 MODIFY 컬럼명 새로운자료형;
+
+CREATE table newbook(
+	bookid NUMBER,
+	bookname VARCHAR2(20),
+	publisher VARCHAR2(20),
+	price NUMBER
+);
+
+INSERT INTO newbook VALUES(1, '자바', '코스타', 5000);
+
+ALTER TABLE newbook ADD isbn VARCHAR2(13) NOT NULL
+       		*
+1행에 오류:
+ORA-01758: 테이블은 필수 열을 추가하기 위해 (NOT NULL) 비어 있어야 합니다.
+==> 레코드가 이미 존재하는 테이블에
+	새로운 컬럼을 추가 할 때에는 not null 제약을 설정 할 수 없다
+	
+
+연습) newbook테이블에 VARCHAR2(13)의 자료형을 가진 칼럼 isbn을 추가
+=> ALTER TABLE newbook ADD isbn VARCHAR2(13);
+
+연습) newbook테이블의 isbn 컬럼의 자료형을 NUMBER로 변경
+=> ALTER TABLE newbook MODIFY isbn NUMBER;
+(만약, 변경하려는 자료형에 맞지 않는 레코드가 이미 있다면 변경할 수 없다.) 
+
+연습) newbook 테이블의 isbn 컬럼을 삭제
+=> ALTER TABLE newbook DROP column isbn;
+
+INSERT INTO newbook VALUES(1, '재미있는 자바', '코스타', 5000);
+INSERT INTO newbook VALUES(2, '재미있고 신나는 스프링', '코스타', 45000);
+
+1행에 오류:
+ORA-12899: "C##MDANG"."NEWBOOK"."BOOKNAME" 열에 대한 값이 너무 큼(실제: 32,
+최대값: 20)
+
+ALTER TABLE newbook MODIFY bookname VARCHAR2(50);
+INSERT INTO newbook VALUES(2, '재미있고 신나는 스프링', '코스타', 45000);
+
+연습) newbook 테이블의 bookname에 대하여 not null 설정
+ALTER TABLE newbook MODIFY bookname VARCHAR2(50) NOT NULL;
+
+<< 이미있는 테이블에 pk 설정하기 >>
+ALTER TABLE 테이블명 ADD PRIMARY KEY(컬럼[들]);
+
+연습) newbook 테이블의 bookid에 대하여 pk설정
+ALTER TABLE newbook MODIFY bookid NUMBER NOT NULL;
+
+ALTER TABLE newbook ADD PRIMARY KEY(bookid);
+
+연습) newbook테이블의 price에 대하여 1000원 이상이여야 하도록 제약을 추가
+ALTER TABLE newbook ADD CHECK(price >= 1000);
+
+----------------------------------------------------------------------
+제약 : Constraint
+
+사용자가 설정한 제약의 정보를 갖고 있는 데이터 사전
+==> user_constraints
+
+SELECT *FROM user_constraints
+DESC user_constraints
+이름                                      널?      유형
+ ----------------------------------------- -------- ----------------------------                		
+ CONSTRAINT_NAME                        <-- 제약이름
+ CONSTRAINT_TYPE                        <--
+ TABLE_NAME                             <--
+ STATUS									<-- 
+
+SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE, TABLE_NAME, STATUS
+FROM user_constraints;
+
+연습) newbook 테이블에 설정된 제약정보를 조회
+
+SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE, TABLE_NAME, STATUS
+FROM user_constraints
+WHERE table_name = 'NEWBOOK';
+
+=> 데이터베이스 명령어 자체는 대소문자를 구별하지 않는다
+	하지만 테이블 이름이 값을 판별할때는 대소문자를 구별한다.
+	데이터 사전인 user_constraints에 테이블 이름은
+	대문자로 들어 간다.
+	
+CONSTRAINT_NAME      CONSTRAINT TABLE_NAME STATUS
+-------------------- ---------- ---------- ----------
+SYS_C008432          C          NEWBOOK    ENABLED
+SYS_C008436          C          NEWBOOK    ENABLED
+SYS_C008439          C          NEWBOOK    ENABLED
+SYS_C008438          P          NEWBOOK    ENABLED
+
+<< 제약을 비활성화 시키기 >>
+ALTER TABLE 테이블이릅 disable constraint 제약명;
+
+<< 제약을 활성화 시키기 >>
+ALTER TABLE 테이블이릅 enable constraint 제약명;
+
+연습) newbook에 pk제약을 비활성화 시키고 테스트
+ALTER TABLE newbook disable constraint SYS_C008438;
+
+ INSERT INTO newbook VALUES(1, '재미있는 자바', '코스타', 5000);
+
+1 개의 행이 만들어졌습니다.
+
+SQL> SELECT *FROM newbook;
+
+BOOKID BOOKNAME             PUBLISHER               PRICE
+------ -------------------- -------------------- --------
+     3 자바                 	코스타                  5,000
+     1 재미있는 자바        	코스타                  5,000
+     2 재미있고 신나는 스프링 		코스타                 45,000
+       
+
+     1 재미있는 자바        	코스타                  5,000
+ 
+=> 제약이 비활성화 되어서 중복된 도서번호 데이터를 허용한다.
+
+연습) newbook의 pk제약을 활성화
+ALTER TABLE newbook enable constraint SYS_C008438;
+
+
+
+
+
