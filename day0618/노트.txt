@@ -486,3 +486,5 @@ INSERT INTO newbook SELECT bookid, bookname, pubhlisher, price FROM book;
 
 customer 테이블의 모든 레코드를 조회하여 newcustomer에 insert 하기
 INSERT INTO newcustomer SELECT *FROM customer;
+
+----------------------------------------------------------------------------

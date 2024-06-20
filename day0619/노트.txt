@@ -492,18 +492,23 @@ SYS_C008438          P          NEWBOOK    ENABLED
 
 << 제약을 비활성화 시키기 >>
 ALTER TABLE 테이블이릅 disable constraint 제약명;
+_____________________________________________________________________________
 
 << 제약을 활성화 시키기 >>
 ALTER TABLE 테이블이릅 enable constraint 제약명;
 
 연습) newbook에 pk제약을 비활성화 시키고 테스트
 ALTER TABLE newbook disable constraint SYS_C008438;
-
- INSERT INTO newbook VALUES(1, '재미있는 자바', '코스타', 5000);
-
+INSERT INTO newbook VALUES(1, '재미있는 자바', '코스타', 5000);
 1 개의 행이 만들어졌습니다.
-
 SQL> SELECT *FROM newbook;
+
+CONSTRAINT_NAME      CONSTRAINT TABLE_NAME STATUS
+-------------------- ---------- ---------- ----------
+SYS_C008432          C          NEWBOOK    ENABLED
+SYS_C008436          C          NEWBOOK    ENABLED
+SYS_C008439          C          NEWBOOK    ENABLED
+SYS_C008438          P          NEWBOOK    DISABLED
 
 BOOKID BOOKNAME             PUBLISHER               PRICE
 ------ -------------------- -------------------- --------
@@ -516,10 +521,20 @@ BOOKID BOOKNAME             PUBLISHER               PRICE
  
 => 제약이 비활성화 되어서 중복된 도서번호 데이터를 허용한다.
 
+_____________________________________________________________________________
 연습) newbook의 pk제약을 활성화
 ALTER TABLE newbook enable constraint SYS_C008438;
 
+CONSTRAINT_NAME      CONSTRAINT TABLE_NAME STATUS
+-------------------- ---------- ---------- ----------
+SYS_C008432          C          NEWBOOK    ENABLED
+SYS_C008436          C          NEWBOOK    ENABLED
+SYS_C008439          C          NEWBOOK    ENABLED
+SYS_C008438          P          NEWBOOK    ENABLED
 
-
+_____________________________________________________________________________
+SELECT CONSTRAINT_NAME, SEARCH_CONDITION_VC, CONSTRAINT_TYPE, TABLE_NAME, STATUS
+FROM user_constraints
+WHERE table_name = 'NEWBOOK';
 
 
