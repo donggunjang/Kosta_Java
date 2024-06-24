@@ -1,0 +1,601 @@
+뷰(VIEW)
+    => 실제 물리적으로는 존재하지 않는 가상의 논리적인 테이블
+
+    - 자주 사용하는 복잡한 SQL을 VIEW를 만들어 둠으로 써 편리하게 사용할 수 있음
+    - 사용자 별로 접근 권한을 두고자 할 때에 VIEW 를 이용함
+
+    CREATE VIEW 뷰이름 AS SELECT ~
+    
+연습) 이번달에 판매량이 가장 높은 상위 3권의 도서의 정보를 조회
+    SELECT BOOKID, COUNT(*)
+    FROM ORDERS
+    WHERE TO_CHAR(SYSDATE, 'YYYY/MM') = TO_CHAR(ORDERDATE, 'YYYY/MM')
+    GROUP BY BOOKID
+    ORDER BY COUNT(*) DESC;
+
+    SELECT BOOKID FROM (SELECT BOOKID, COUNT(*)
+                            FROM ORDERS
+                            WHERE TO_CHAR(SYSDATE, 'YYYY/MM') = TO_CHAR(ORDERDATE, 'YYYY/MM')
+                            GROUP BY BOOKID
+                            ORDER BY COUNT(*) DESC)
+    WHERE ROWNUM <= 3;
+
+    CREATE VIEW top3 AS
+    SELECT * FROM BOOK WHERE BOOKID IN
+        (SELECT BOOKID FROM (SELECT BOOKID, COUNT(*)
+        FROM ORDERS
+        WHERE TO_CHAR(SYSDATE, 'YYYY/MM') = TO_CHAR(ORDERDATE, 'YYYY/MM')
+        GROUP BY BOOKID
+        ORDER BY COUNT(*) DESC)
+        WHERE ROWNUM <= 3);
+        
+연습) 오늘날짜의 출판사별 총 판매수량, 총판매금액을 조회하는
+	뷰를 만들고 실행 해 보자.
+	
+CREATE VIEW view1 AS
+SELECT pubhlisher, COUNT(orderid) cnt, SUM(saleprice) sum
+FROM orders o, book b
+WHERE o.bookid = b.bookid 
+AND to_char(sysdate, 'yyyy/mm') = to_char(orderdate,'yyyy/mm')
+GROUP BY pubhlisher;
+
+
+연습) 뷰를 통해서 조건에 맞는 레코드만 조회하기
+	판매건수가 2건이상인 것만 조회
+
+SELECT *FROM view1
+WHERE cnt >=2;
+
+연습) 도서명에 '축구'를 포함하고 있는 도서의 정보를 조회하는
+	뷰를 생성해 봅시다.
+	뷰이름은 vw_book이라고 한다.
+CREATE VIEW vw_book AS
+SELECT *
+FROM book
+WHERE bookname LIKE '%축구%';
+
+연습) '대한민국'에 거주하는 고객의 정보를 출력하는 뷰를 생성
+	 	vw_customer
+	 	
+CREATE VIEW vw_customer AS
+SELECT *FROM customer
+WHERE address LIKE '대한민국%';
+
+conn system/manager;
+create user c##kim identified by kim;
+grant connect, resource to c##kim;
+
+연습) c##mdang이 갖고 있는 테이블
+	emp 중에 c##kim에게
+	사원번호, 사원명, 부서번호, 이메일만 조회할 수 있는 권한을 부여하기
+	CREATE VIEW vw_emp
+	AS
+	SELECT eno, ename, dno, email
+	FROM emp;
+	
+** 권한부여
+	GRANT SELECT on c##mdang.vw_emp to c##kim;
+	
+** 권한제거
+	REVOKE SELECT on c##mdang.vw_emp FROM c##kim;
+	
+================================================================================
+
+연습) 20번 부서에 근무하는
+	직원들의 사원번호, 이름, 직책, 입사일, 부서번호를 조회하는 뷰를 생성
+		vm_emp20
+	CREATE VIEW vm_emp20 
+	AS
+	SELECT eno, ename, job, hiredate, dno
+	FROM emp
+	WHERE dno = 20;
+	
+뷰를 통해서 추가,수정,삭제
+
+뷰를 통해서 레코드 추가하기
+INSERT INTO vm_emp20 VALUES(3000, '홍철수', '사원', sysdate, 20);
+
+==> 뷰를 이용하여 레코드 추가 가능
+	실제로는 뷰를 만들 때 사용한 emp 테이블에 레코드가 추가되고
+	뷰의 속성이외의 속성들이 NULL을 허용하거나 DEFAULT 값이 있어야지만 추가할 수 있다.
+	
+INSERT INTO vm_emp20 VALUES(4000, '홍철', '사원', sysdate, 30);
+==> 뷰 생성시 사용된
+	조건에 맞지 않는 레코드도
+	추가 됩니다.
+==> 모테이블에 추가되고 뷰에는 조회가 되지 않는다.
+
+-------------------------------------------------------------------------------
+뷰를 통해서 수정하기
+
+UPDATE vm_emp20 set job = '과장' WHERE eno = 3000;
+
+update vm_emp20 set dno = 30 WHERE eno = 3000;
+==> 뷰를 통해서 수정이 가능하다.
+==> 뷰 생성시 사용한 조건과 다른값으로도 수정이 가능하다.
+
+UPDATE EMP SET DNO=20 WHERE eno=4000;
+
+뷰를 통해서 삭제하기
+DELETE vm_emp20 WHERE eno = 4000;
+
+<<뷰 삭제 하기 >>
+DROP VIEW 뷰이름;
+
+--------------------------------------------------------------------------------
+
+** 뷰를 생성할 때 설정한 조건에 맞지 않는 레코드를 추가 할 수 없도록
+	조건에 맞지 않는 값으로 수정할 수 없도록 뷰 만들기
+	
+	- WITH CHECK OPTION -
+	
+	CREATE VIEW vw_emp20
+	AS
+	SELECT eno, ename, job, hiredate, dno
+	FROM emp
+	WHERE dno = 20
+	WITH CHECK OPTION;
+	
+-------------------------------------------------------------------------------	
+	SQL> INSERT INTO vw_emp20 VALUES(4000, '유관순', '사원', sysdate, 30);
+	INSERT INTO vw_emp20 VALUES(4000, '유관순', '사원', sysdate, 30)
+    	        *
+	1행에 오류:
+	ORA-01402: 뷰의 WITH CHECK OPTION의 조건에 위배 됩니다
+	
+	SQL> UPDATE vw_emp20 SET dno = 30 WHERE eno = 3001;
+	UPDATE vw_emp20 SET dno = 30 WHERE eno = 3001
+    	   *
+	1행에 오류:
+	ORA-01402: 뷰의 WITH CHECK OPTION의 조건에 위배 됩니다
+	
+-------------------------------------------------------------------------------
+
+** 조회만 가능한 뷰 생성
+WITH READ ONLY
+
+CREATE VIEW vw_emp20
+AS
+SELECT eno, ename, job, hiredate, dno
+FROM emp
+WHERE dno = 20
+WITH READ ONLY;
+--------------------------------------------------------------------------------
+SQL> INSERT INTO vw_emp20 VALUES(3000, '유관순', '사원', sysdate, 20);
+INSERT INTO vw_emp20 VALUES(3000, '유관순', '사원', sysdate, 20)
+*
+1행에 오류:
+ORA-42399: 읽기 전용 뷰에서는 DML 작업을 수행할 수 없습니다.
+
+SQL> UPDATE vw_emp20 SET dno = 30 WHERE eno = 3001;
+UPDATE vw_emp20 SET dno = 30 WHERE eno = 3001
+                    *
+1행에 오류:
+ORA-42399: 읽기 전용 뷰에서는 DML 작업을 수행할 수 없습니다.
+
+-------------------------------------------------------------------------------
+
+시스템 뷰
+	=> 오라클이 제공하는 미리 만들어 놓은 뷰를 말하며 '데이터 사전' 이라고도 함
+	
+	USER_OBJEcTS => 사용자가 만든 객체의 정보를 가지고 있는 데이터 사전
+	USER_TALBES => 사용자가 만든 테이블의 정보를 가지고 있는 데이터 사전
+	USER_
+	
+	만든 어떤것의 이름이 잘 기억이 안남
+	USER_OBJECTS 조회하기
+	SELECT OBJECT_NAME FROM USER_OBJECTS;
+	
+	조회한 결과에는 사용자가 만든 모든 개체정보들을 알 수 있음 
+	테이블명과 뷰, 제약들이 들어 있다.
+	
+	USER_TABLES 는 데이터사전중에 사용자가 만든
+	
+-------------------------------------------------------------------------------
+
+<< INDEX >>
+
+==> 조건식에 자주 사용되는 컬럼에 대하여
+	미리 색인표를 만들어 두는 것을 말한다.
+	인덱스를 만들어 두면 검색시에 빠른 성능을 기대할 수 있다.
+	
+	데이터 양(레코드 수)이 많을때
+	검색(조건식)에 빈번히 사용하는 컬럼에 대하여
+	"인덱스"를 만들어 두면 검색시에 성능향상을 기대할 수 있다.
+	
+	데이터 양이 적으면
+	"인덱스"가 있으나 없으나 성능효과를 체감하기는 어렵다.
+	
+	데이터의 수정이 빈번한 칼럼에
+	"인덱스"를 만들어 두면
+	오히려 "성능저하"의 요인이 될 수 있다.
+	
+<< 인덱스를 만드는 방법 >>
+CREATE INDEX 인덱스이름 ON 테이블이름(컬럼이름[들]);
+
+연습) 도서명에 인덱스를 만들기
+CREATE INDEX idx_book ON book(bookname);
+
+14번의 도서명을 '재미있는 오라클' 로 수정
+
+UPDATE book SET bookname = '재미있는 오라클' WHERE bookid = 14;
+인덱스를 만들어둔 칼럼 bookname에 대하여
+자료수저으, 추가 삭제가 빈번히 일어났다면 오히려 성능 저하의 요인이 될수 있음
+
+==> 인덱스를 재구성 해야함
+<< 인덱스 재 구성 하기 >>
+
+ALTER INDEX 인덱스이름 REBUILD;
+
+** 인덱스가 효과를 발휘하려면 데이터 수정이 빈번하지 않아야 하고
+	또, 인덱스를 설정한 칼럼의 같은 값의 종류가 많이 않아야 의미가 있다.
+	100만건의 데이터 중에 "주소" 칼럼의 값의 종류가 "서울", 울산", "광주"
+	세가지 밖에 없다. 이럴때에는 인덱스가 오히려 성능저하의 요인이 될 수 있다.
+	
+<< 인덱스 삭제 >>
+DROP INDEX 인데스이름;
+
+------------------------------------------------------------------------------
+
+PL/SQL
+	- PROCEDURE		==> 자바의 메소드와 유사
+	
+	- FUNCTION		==> SELECT 절에 사용 가능
+	
+	-TRIGGER		==> 이벤트(INSERT, UPDATE, DELETE) 가 
+						발생하였을 때 연쇄하여 동작
+						
+<< 프로시저 만들기 >>
+
+CREATE OR REPLACE PROCEDURE 프로시저이름(변수명 모드 자료형,...)
+AS
+	지역변수(들)
+BEGIN
+	프로시저가 해야할 SQL명령어(들)
+END;
+/
+
+모드의 종류
+	IN		입력용, 프로시저가 일을 하기 위해
+			값을 전달 받기 위한 모드
+	OUT		출력용, 프로시저가 일을 한 결과를
+			돌려 주기 위한 모드
+
+연습) 도서번호, 도서명, 출판사, 가격을 매개변수로 전달받아
+	도서를 추가하는 프러시저를 만들고 프로시저를 호출하여 INSERT를 수행
+	
+CREATE or replace PROCEDURE insertBook(
+	myBookID in book.bookid%TYPE,
+	myBookName book.bookname%TYPE,
+	myPubhlisher book.pubhlisher%TYPE,
+	myPrice book.price%TYPE
+)
+AS
+BEGIN
+	INSERT INTO book VALUES(myBookID, myBookName, myPrice, myPubhlisher);
+END;
+/
+
+<< 프로시저 호출 >>
+exec 프로시저명(값1, 값2, ..)
+
+연습) 도서번호와 가격을 매개변수로 전달받아
+	해당도서의 가격을 수정하는 프로시저를 만들고 호출 
+	
+CREATE or replace PROCEDURE updateBook(
+	myBookID book.bookid%TYPE,
+	myPrice book.price%TYPE
+)
+AS
+BEGIN
+	UPDATE book SET price = myPrice WHERE bookid = myBookID;
+END;
+/
+
+연습) 도서번호를 매개변수로 전달받아 해당 도서를 삭제하는 프로시저를 만들고 호출
+
+CREATE PROCEDURE deleteBook(
+	myBookID in book.bookid%TYPE
+)
+AS
+BEGIN
+	DELETE book WHERE bookid = myBookID;
+END;
+/
+
+<< PL/SQL에서 선택문 사용하기 >>
+==> 조건에 따라 실행할 sql문을 선택하도록 할 수 있다.
+
+<< 선택문의 형식 >>
+IF 조건식 THEN
+	참일때 실행시킬 SQL
+ELSE
+	거짓일때 실행시킬 SQL
+END IF;
+
+연습) 도서번호, 도서명, 출판사, 가격을 매개변수로 전달받아
+	해당 도서가 이미 있다면 도서의 가격을 수정하고
+	그렇지 않다면 도서를 추가하는 프로시저를 생성하고 호출
+	
+CREATE OR REPLACE PROCEDURE BookInsertOrUpdate(
+	myBookID in book.bookid%TYPE,
+	myBookName book.bookname%TYPE,
+	myPubhlisher book.pubhlisher%TYPE,
+	myPrice book.price%TYPE	
+)
+AS
+	mycount NUMBER;
+BEGIN
+	SELECT count(*) INTO mycount FROM book WHERE bookid = myBookID;
+	
+	IF mycount = 0 THEN
+		INSERT INTO book VALUES(myBookID, myBookName, myPrice, myPubhlisher);
+	ELSE
+		UPDATE book SET price = myPrice WHERE bookid = myBookID;
+	END IF;
+END;
+/
+
+------------------------------------------------------------------------------
+
+<< 반환값이 있는 프로시저 만들기 >>
+
+CREATE OR REPLACE PROCEDURE 프로시저이름(
+	매개변수 in 자료형,
+	매개변수1 out 자료형
+	매개변수2 out 자료형,
+	..
+)
+AS
+BEGIN
+	SELECT 컬럼1, 컬럼2, .. into 매개변수1, 매개변수2.. FROM ~~
+END;
+/
+================================================================================
+
+도서의 평균 가격을 반환하는 프로시저
+
+CREATE OR REPLACE PROCEDURE getAvgPrice(
+	avgPrice out NUMBER
+)
+AS
+BEGIN
+	SELECT avg(price) into avgPrice FROM book;
+END;
+/
+
+<< 반환값이 있는 프로시저 호출하기 >>
+변수를 선언하고 프로시저를 호출하고 반환값을 확인(출력)하기 위한 프로그램이 필요해요.
+PL/SQL구문이 필요
+
+SET SERVEROUTPUT ON; 			<--화면에 결과를 출력하기 위해 필요한 설정
+
+<< PL/SQL의 기본 구조 >>
+DECLARE
+	변수명 자료형;
+BEGIN
+	프로시저호출(변수명);				<-- 프로시저에서 전달하는 변수에 값을 담아줌.
+	dbms_output.put_line(변수명)	<-- 콘솔에 출력하는 명령
+END;
+
+-------------------------------------------------------
+연습) 평균 도서가격을 반환하는 프로시저를 호출
+
+SET SERVEROUTPUT ON;
+
+DECLARE
+	result NUMBER;
+BEGIN
+	getAvgPrice(result);
+	dbms_output.put_line('책값 평균' || RESULT);
+END;
+/
+
+---------------------------------------------------------------
+
+연습) 고객번호를 매개변수로 전달받아 해당 고객의 총 구매 건수와 총구매 금액을
+	반환하는 프로시저를 만들고 호출
+	
+CREATE OR REPLACE PROCEDURE getCustomer(
+	myCustid customer.custid%TYPE,
+	myCnt out NUMBER, 
+	mySum out NUMBER 
+)
+AS
+BEGIN
+	SELECT COUNT(*), SUM(saleprice) into myCnt, mySum FROM orders WHERE custid = myCustid; 
+END;
+/
+
+DECLARE
+	c NUMBER;
+	s NUMBER;
+BEGIN
+	getCustomer(5,c,s);
+	dbms_output.put_line('건수' || c);
+	dbms_output.put_line('금액' || s);
+END;
+/
+
+---------------------------------------------------------------------------
+<< CURSOR를 사용하는 방법 >>
+CREATE OR REPLACE PROCEDURE 프로시저이름
+(
+	매개변수(들)
+)
+AS
+	지역변수(들)
+	CURSOR 커서이름 IS SELECT ~~
+BEGIN
+	OPEN 커서이름;								<-- SQL 동작
+	LOOP									<-- 반복문 시작
+		FETCH 커서이름 INTO 변수1, 변수2, ..		<-- SELECT한 컬럼의 값을 변수에 저장.
+		EXIT WHEN 커서이름%NOTFOUND;			<-- 더이상 레코드가 없으면 반복문 탈출
+	END LOOP;								<-- 반복문 끝
+	CLOSE 커서이름;
+END;
+/
+
+연습) 고객번호를 매개변수를 전달받아 해당고객이 구매한 모든 도서명을 출력하는 프로시저를 만들고 호출
+
+CREATE OR REPLACE PROCEDURE orderBook(
+	myCustID orders.custid%TYPE
+)
+AS
+	myBookName VARCHAR2(30);
+	CURSOR c IS SELECT DISTINCT bookname FROM book b, orders o WHERE b.bookid = o.bookid 
+	AND custid = myCustID;
+BEGIN
+	OPEN c;
+	LOOP
+		FETCH c INTO myBookName;
+		dbms_output.put_line(myBookName);
+		EXIT WHEN c%NOTFOUND;
+	END LOOP;
+	CLOSE c;
+END;
+/
+
+SQL> exec orderBook(1)
+신나는 자바
+축구의 역사
+골프 바이블
+세계의 벽
+재미있는 오라클
+재미있는 오라클						
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+
+
+------------------------------------------------------------------------------
+연습) 모든 주문에 대하여 총이익금을 계산하여 출력하는
+	프로시저를 만들고 호출 해 보자.
+	주문가격이 30000원 이상이면 이익금은 10% 그렇지 않으면 5%이다.
+	
+CREATE OR REPLACE PROCEDURE printAllProfit
+AS
+	total NUMBER;
+	price NUMBER;
+	profit NUMBER;
+	CURSOR c IS SELECT saleprice FROM orders;
+BEGIN
+	total := 0;
+	OPEN c;
+	LOOP
+		FETCH c INTO price ;
+		IF price >= 30000 THEN
+			profit := price * 0.1;
+		ELSE
+			profit := price *0.05;			
+		END IF;
+		total := total + profit;
+		EXIT WHEN c%NOTFOUND;
+	END LOOP;
+	CLOSE c;
+	dbms_output.put_line('총이익금:' || total);
+END;
+/
+
+==============================================================================
+
+<< TRIGGER >> 
+어떠한 테이블에 INSERT, UPDATE, DELETE가 일어 났을 때 
+	연쇄하여 자동으로 동작시키고자 할 SQL문장이 있을때 사용하는 것
+
+	
+<< 트리거 만들기 >> 
+CREATE OR REPLACE TRIGGER 트리거이름
+시점 이벤트종류
+ON 테이블명 FOR EACH ROW
+
+DECLARE
+
+BEGIN
+
+END;
+/
+
+==> 시점에는 BEFORE, AFTER가 올 수 있다.
+==> 이벤트에는 INSERT, UPDATE, DELETE가 올수 있다.
+==> 트리에서 사용할 수 있는 키워드
+	:NEW	==> INSERT,UPDATE가 된 새로운 행을 의미하는 변수.
+	:OLD	==> DELETE, UPDATE가 되기 전 과정의 행을 의미하는 변수.
+	
+-------------------------------------------------------------------------
+
+** 실습을 위하여 dept 테이블을 복사하여 dept_back 테이블 만들기
+
+CREATE TABLE dept_back AS select * FROM dept;
+
+연습) dept에 새로운 레코드가 추가 되면 그 동일한 레코드를
+	dept_back에 추가하는 트리거를 만들어 보자.
+	
+CREATE OR REPLACE TRIGGER trg_insert_dept
+AFTER INSERT
+ON dept FOR EACH ROW
+DECLARE
+BEGIN
+	INSERT INTO dept_back VALUES( :NEW.dno, :NEW.dname, :NEW.dloc);
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_update_dept 
+AFTER UPDATE
+ON dept FOR EACH ROW
+DECLARE
+BEGIN
+	UPDATE dept_back SET dname = :NEW.dname, dloc= :new.dloc WHERE dno = :NEW.dno;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_delete_dept
+AFTER DELETE
+ON dept FOR EACH ROW
+DECLARE
+BEGIN 
+	DELETE dept_back WHERE dno = :OLD.dno;
+END;
+/
+
+CREATE TABLE 상품(
+	상품번호 NUMBER PRIMARY KEY,
+	상품명 VARCHAR2(30),
+	가격 NUMBER,
+	재고수량 NUMBER
+);
+
+CREATE TABLE 입고(
+	입고번호 NUMBER PRIMARY KEY,
+	상품번호 NUMBER REFERENCES 상품(상품번호),
+	입고수량 NUMBER,
+	입고일 DATE
+);
+
+INSERT INTO 상품 VALUES(100, '색종이', 500, 0);
+INSERT INTO 상품 VALUES(200, '삼각자', 700, 0);
+INSERT INTO 상품 VALUES(300, '딱풀', 600, 0);
+
+column 상품번호 format 9999;
+column 가격 format 9,999,999;
+column 재고수량 format 9999;
+column 입고번호 format 9999;
+column 입고수량 format 9999;
+
+column 상품명 format a10;
+column 입고일 format a15;
+
+연습) "입고"테이블에 레코드가 추가되면
+	상품테이블에 해당 상품의 재고수량을 입고수량 만틈
+	증가시키는 트리거를 만들고 잘 동작하는지 확인
+
+CREATE OR REPLACE TRIGGER trg_update_상품2
+AFTER INSERT
+ON 입고 FOR EACH ROW
+DECLARE
+BEGIN
+	UPDATE 상품 SET 재고수량 = :NEW.입고수량 WHERE 상품번호 = :NEW.상품번호;
+END;
+/
+
+
+c
