@@ -1,0 +1,112 @@
+오라클이 제공하는 함수들이 많이 있다
+이러한 함수들은 SELECT 절에 사용할 수 있다.
+
+** 사용자 정의 함수(Function) 만드는 방법
+
+create or replace function 함수이름 (매개변수명 자료형) return 자료형
+is
+    변수선언
+begin
+    함수가 해야할 문장(들)
+    return 값;
+end;
+/
+--------------------------------------------------------------------------
+
+연습) 판매금액을 매개변수로 전달받아 이익금을 반환하는 함수를 만들어 보자.
+	판매금액이 30000원 이상이면 10% 그렇지 않으면 5%가 이익금이다.
+	
+CREATE OR REPLACE FUNCTION margin(saleprice NUMBER) RETURN NUMBER
+IS
+	RESULT NUMBER;
+BEGIN
+	IF saleprice >= 30000 THEN
+		RESULT := saleprice * 0.1;
+	ELSE
+		RESULT := saleprice * 0.05;
+	END IF;
+	RETURN RESULT;
+end;
+/
+
+
+각 주문에 대하여 주문번호, 판매금액, 이익금을 출력
+SELECT orderid, saleprice, margin(saleprice) FROM orders;
+
+연습) 오늘날짜에 판맨된 주문에 대한
+주문번호, 도서번호, 도서명, 고객명, 이익금 출력
+
+SELECT orderid, bookid,
+		(SELECT bookname FROM book b WHERE b.bookid = o.bookid) bookname,
+		(SELECT name FROM customer c WHERE c.custid = o.custid) name,
+		margin(saleprice) 이익금
+FROM orders o
+WHERE to_char(orderdate, 'yy/mm/dd') = to_char(sysdate, 'yy/mm/dd');
+
+   ORDERID BOOKID BOOKNAME             NAME           이익금
+---------- ------ -------------------- ---------- ----------
+        21     15 신나는 자바          박지성           3400
+        22     15 신나는 자바          손흥민           3400
+        23     14 재미있는 오라클      손흥민           3400
+        24      1 축구의 역사          손흥민           3400
+        25      2 축구잘아는사람       손흥민           3400
+        26      3 세계의 벽            손흥민           3400
+        27      2 축구잘아는사람       이강인           3400
+        28     15 신나는 자바          이강인           3400
+        
+=========================================================================
+
+연습) 고객번호를 매개변수로 전달받아
+	그 고객의 총 주문액을 계산하여 주문총액이 20000원 이상이면 "우수"
+	그렇지 않으면 "보통"을 반환하는 grade 함수를 만들고 호출
+	
+CREATE OR REPLACE FUNCTION grade(myCustid VARCHAR2) return VARCHAR2
+IS
+	result VARCHAR2(30);
+	total NUMBER;
+BEGIN
+	SELECT SUM(saleprice) INTO total FROM orders WHERE custid = myCustid;
+	IF total >= 20000 THEN
+		result := '우수';
+	ELSE 
+		result := '보통';
+	END IF;
+	RETURN result;
+END;
+/
+
+NAME       등급
+---------- ----------
+임유나     보통
+박지성     우수
+손흥민     우수
+이강인     우수
+로리 맥길  우수
+로이
+
+박세리     우수
+   tiger   보통
+
+
+Tiger      보통
+Tiger      보통
+TIGER      보통
+  Tiger    보통
+TIGER      보통
+
+연습) 고객의 주소를 매개변수로 전달받아
+	국내에 거주하면 '국내거주' 그렇지 않으면
+	'국외거주'를 반화하는 함수를 만들고 호출해 봅니다.
+	
+CREATE OR REPLACE FUNCTION printLoc(addr VARCHAR2) RETURN VARCHAR2
+IS
+	result VARCHAR2(30);
+BEGIN
+	IF addr LIKE '대한민국%' THEN
+		result := '국내거주';
+	ELSE
+		result := '국외거주';
+	END IF;
+	RETURN result;
+END;
+/ 

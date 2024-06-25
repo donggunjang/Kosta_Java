@@ -593,9 +593,28 @@ AFTER INSERT
 ON 입고 FOR EACH ROW
 DECLARE
 BEGIN
-	UPDATE 상품 SET 재고수량 = :NEW.입고수량 WHERE 상품번호 = :NEW.상품번호;
+	UPDATE 상품 SET 재고수량 = 재고수량 + :NEW.입고수량 WHERE 상품번호 = :NEW.상품번호;
 END;
 /
+=========================================================================
+연습) "입고"테이블에 레코드가 삭제되면 해당상품의 재고수량을 감소시키는 트리거를 만들고
+결과를 확인
 
+CREATE OR REPLACE TRIGGER trg_delete_상품
+AFTER DELETE
+ON 입고 FOR EACH ROW
+DECLARE
+BEGIN 
+	UPDATE 상품 SET 재고수량 = 재고수량 - :OLD.입고수량 WHERE 상품번호 = :OLD.상품번호;
+END;
+/
+=========================================================================
 
-c
+CREATE OR REPLACE TRIGGER trg_update_상품3
+AFTER UPDATE
+ON 입고 FOR EACH ROW
+DECLARE
+BEGIN 
+	UPDATE 상품 SET 재고수량 = 재고수량 - (:OLD.입고수량 - :NEW.입고수량) WHERE 상품번호 = :NEW.상품번호;
+END;
+/
